@@ -48,14 +48,18 @@ class Controller
 
         if ($_POST['size'] && isset($_FILES['images']["name"])) {
             $size = $_POST['size'];
-            $imgs = [];
-            for ($i = 0; $i < $size; $i++) {
-                $imgs[] = "images/" . $_FILES["images"]["name"][$i];
+            $uploadedImagesCount = count($_FILES['images']["name"]);
+
+            if ($size != $uploadedImagesCount) {
+                $_SESSION['image_upload_error'] = true;
+            } else {
+                $_SESSION['image_upload_error'] = null;
             }
-            for ($i = 0; $i < count($imgs); $i++) {
-                if (is_uploaded_file($imgs[$i])) {
-                    move_uploaded_file($imgs[$i], $this->uploaddir . basename($imgs[$i]));
-                }
+
+            for ($i = 0; $i < $size; $i++) {
+                $targetFile = $this->uploaddir . basename($_FILES["images"]["name"][$i]);
+                move_uploaded_file($_FILES["images"]["tmp_name"][$i], $targetFile);
+                $imgs[] = $targetFile;
             }
             $slider = new Slider($imgs, $size);
             $blocks[] = $slider;
@@ -76,6 +80,10 @@ class Controller
             $model = new Model($blocks, $_POST['title']);
         } else {
             $model = new Model($blocks);
+        }
+
+        if (isset($_POST['submit'])) {
+            $_SESSION['selected_blocks'] = [];
         }
 
         /* робота с моделлю */

@@ -5,8 +5,16 @@ if (!isset($_SESSION['selected_blocks'])) {
     $_SESSION['selected_blocks'] = [];
 }
 
+// if (isset($_POST['save']) && isset($_POST['block_type'])) {
+//     $_SESSION['selected_blocks'] = array_merge($_SESSION['selected_blocks'], $_POST['block_type']);
+// }
+
 if (isset($_POST['save']) && isset($_POST['block_type'])) {
-    $_SESSION['selected_blocks'] = array_merge($_SESSION['selected_blocks'], $_POST['block_type']);
+  foreach ($_POST['block_type'] as $block) {
+      if (!in_array($block, $_SESSION['selected_blocks'])) {
+          $_SESSION['selected_blocks'][] = $block;
+      }
+  }
 }
 
 if (isset($_POST['submit'])) {
@@ -29,16 +37,9 @@ if (isset($_POST['submit'])) {
             text-decoration: none;
         }
     </style>
+    <link rel="shortcut icon" href="./img/logo.png" type="image/x-icon">
 </head>
 <body>
-<?php
-function checkImgsCount($imagesCount, $uploadedImagesCount)
-{
-    if ($imagesCount != $uploadedImagesCount) {
-        echo "<div class='alert alert-danger mt-3'><strong>Помилка!</strong> Кількість зображень не збігається!</div>";
-    }
-}
-?>
     <div class="p-4 bg-primary text-white text-center">
         <h1 class="text-center">Конструктор Landing page</h1>
     </div>
@@ -95,11 +96,6 @@ function checkImgsCount($imagesCount, $uploadedImagesCount)
       <input type="text" class="form-control" placeholder="Уведіть title сторінки" name="title" required>
     </div>
 
-    <div class="input-group mb-3">
-      <span class="input-group-text">Заголовок сторінки*</span>
-      <input type="text" class="form-control" placeholder="Уведіть заголовок сторінки" name="header" required>
-    </div>
-
     <?php
 if (isset($_POST['save'])) {
     $selected_blocks = $_SESSION['selected_blocks'];
@@ -107,7 +103,11 @@ if (isset($_POST['save'])) {
     foreach ($selected_blocks as $block) {
         switch ($block) {
             case 'header':
-                echo '<div class="input-group mb-3">
+                echo '    <div class="input-group mb-3">
+                <span class="input-group-text">Заголовок сторінки*</span>
+                <input type="text" class="form-control" placeholder="Уведіть заголовок сторінки" name="header" required>
+              </div>
+              <div class="input-group mb-3">
                         <span class="input-group-text">Логотип*</span>
                         <input type="file" class="form-control" placeholder="Оберіть зображення логотипу" name="logo" required>
                         <input type="hidden" name="MAX_FILE_SIZE" value="30000">
@@ -160,6 +160,12 @@ if (isset($_POST['save'])) {
       <input type="submit" class="btn btn-primary" value="Сгенерувати" name="submit" id="ok">
     </div>
 
+    <?php
+if (isset($_SESSION['image_upload_error'])) {
+    echo "<div class='alert alert-danger mt-3'><strong>Помилка!</strong> Кількість зображень не збігається!</div>";
+}
+?>
+
     <div class="alert alert-info">
 <strong>Уважно!</strong> <b>*</b> поля, <mark>обов'язкові</mark> для заповнення.</a>
 </div>
@@ -169,11 +175,6 @@ if (isset($_POST['save'])) {
     <button class="btn btn-primary"><a href='landing.zip' download class="text-light">Завантажити архів</a>
 </button>
   </form>
-      <?php
-if (isset($_POST['submit'])) {
-    checkImgsCount($_POST['size'], $_FILES['images']['name']);
-}
-?>
 </div>
 
 <div class="container mt-5">
