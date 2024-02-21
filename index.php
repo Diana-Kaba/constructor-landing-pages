@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
   </div>
 
   <div class="input-group mb-3">
-      <input type="submit" class="btn btn-primary" value="Зберегти" name="save">
+      <input type="submit" class="btn btn-primary" value="Зберегти" name="save" <?php if(isset($_POST['save'])) echo "disabled"; else echo ""; ?>>
     </div>
 
 </form>
@@ -157,7 +157,7 @@ if (isset($_POST['save'])) {
 ?>
 
     <div class="input-group mb-3">
-      <input type="submit" class="btn btn-primary" value="Сгенерувати" name="submit" id="ok">
+      <input type="submit" class="btn btn-primary" value="Сгенерувати" name="submit" id="ok" <?php if(isset($_POST['save'])) echo ""; else echo "disabled"; ?>>
     </div>
 
     <?php
