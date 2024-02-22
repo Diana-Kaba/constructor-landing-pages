@@ -1,12 +1,11 @@
 <?php
 class Slider extends Block
 {
-    private $images, $size;
+    private $images;
 
-    public function __construct($images = [], $size = 0)
+    public function __construct($images = [])
     {
         $this->images = $images;
-        $this->size = $size;
     }
 
     public function draw()
@@ -18,7 +17,8 @@ class Slider extends Block
 
        <!-- Indicators/dots -->
        <div class="carousel-indicators">';
-        for ($i = 0; $i < $this->size; $i++) {
+       $size = count($this->images);
+        for ($i = 0; $i < $size; $i++) {
             $str .= '<button type="button" data-bs-target="#demo" data-bs-slide-to="' . $i . '" ';
             if ($i == 0) {
                 $str .= 'class="active"';
@@ -29,7 +29,7 @@ class Slider extends Block
 
         $str .= '<!-- The slideshow/carousel -->
         <div class="carousel-inner">';
-        for ($i = 0; $i < $this->size; $i++) {
+        for ($i = 0; $i < $size; $i++) {
             $str .= '<div class="carousel-item';
             if ($i == 0) {
                 $str .= ' active';

@@ -46,23 +46,26 @@ class Controller
             $blocks[] = $text;
         }
 
-        if ($_POST['size'] && isset($_FILES['images']["name"])) {
-            $size = $_POST['size'];
+        if (isset($_FILES['images']["name"])) {
             $uploadedImagesCount = count($_FILES['images']["name"]);
 
-            if ($size != $uploadedImagesCount) {
-                $_SESSION['image_upload_error'] = true;
-            } else {
-                $_SESSION['image_upload_error'] = null;
-            }
-
-            for ($i = 0; $i < $size; $i++) {
+            for ($i = 0; $i < $uploadedImagesCount; $i++) {
                 $targetFile = $this->uploaddir . basename($_FILES["images"]["name"][$i]);
                 move_uploaded_file($_FILES["images"]["tmp_name"][$i], $targetFile);
                 $imgs[] = $targetFile;
             }
-            $slider = new Slider($imgs, $size);
+            $slider = new Slider($imgs);
             $blocks[] = $slider;
+        }
+
+        // Видалення застарілих зображень
+        if (empty($_FILES['images']['name'])) {
+            $files = glob($this->uploaddir . "*");
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
         }
 
         if ($_POST['footer']) {

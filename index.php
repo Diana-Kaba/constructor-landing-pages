@@ -10,11 +10,11 @@ if (!isset($_SESSION['selected_blocks'])) {
 // }
 
 if (isset($_POST['save']) && isset($_POST['block_type'])) {
-  foreach ($_POST['block_type'] as $block) {
-      if (!in_array($block, $_SESSION['selected_blocks'])) {
-          $_SESSION['selected_blocks'][] = $block;
-      }
-  }
+    foreach ($_POST['block_type'] as $block) {
+        if (!in_array($block, $_SESSION['selected_blocks'])) {
+            $_SESSION['selected_blocks'][] = $block;
+        }
+    }
 }
 
 if (isset($_POST['submit'])) {
@@ -85,19 +85,25 @@ if (isset($_POST['submit'])) {
   </div>
 
   <div class="input-group mb-3">
-      <input type="submit" class="btn btn-primary" value="Зберегти" name="save" <?php if(isset($_POST['save'])) echo "disabled"; else echo ""; ?>>
+      <input type="submit" class="btn btn-primary" value="Зберегти" name="save" <?php if (isset($_POST['save'])) {
+    echo "disabled";
+} else {
+    echo "";
+}
+?>>
     </div>
 
 </form>
 
-  <form enctype="multipart/form-data" action="controller/controller.php" method="post">
+    <?php
+if (isset($_POST['save'])) {
+    echo <<<HTML
+      <form enctype="multipart/form-data" action="controller/controller.php" method="post">
     <div class="input-group mb-3">
       <span class="input-group-text">Title сторінки*</span>
       <input type="text" class="form-control" placeholder="Уведіть title сторінки" name="title" required>
     </div>
-
-    <?php
-if (isset($_POST['save'])) {
+    HTML;
     $selected_blocks = $_SESSION['selected_blocks'];
 
     foreach ($selected_blocks as $block) {
@@ -114,8 +120,8 @@ if (isset($_POST['save'])) {
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">Розміри логотипу <b> (у px)</b></span>
-                        <input type="number" class="form-control" placeholder="Уведіть ширину логотипу" name="logo-width">
-                        <input type="number" class="form-control" placeholder="Уведіть висоту логотипу" name="logo-height">
+                        <input type="number" class="form-control" placeholder="Уведіть ширину логотипу" name="logo-width" value="40">
+                        <input type="number" class="form-control" placeholder="Уведіть висоту логотипу" name="logo-height" value="40">
                     </div>';
                 break;
 
@@ -134,10 +140,7 @@ if (isset($_POST['save'])) {
                 break;
 
             case 'slider':
-                echo '<div class="input-group mb-3">
-                        <span class="input-group-text">Кількість зображень у слайдері</b></span>
-                        <input type="number" class="form-control" placeholder="Уведіть кількість зображень" name="size">
-                    </div>
+                echo '
                     <div class="input-group mb-3">
                         <span class="input-group-text">Зображення в слайдері  <b> (JPG, PNG)</b></span>
                         <input type="file" multiple class="form-control" placeholder="Оберіть зображення" name="images[]">
@@ -155,14 +158,13 @@ if (isset($_POST['save'])) {
     }
 }
 ?>
-
-    <div class="input-group mb-3">
-      <input type="submit" class="btn btn-primary" value="Сгенерувати" name="submit" id="ok" <?php if(isset($_POST['save'])) echo ""; else echo "disabled"; ?>>
-    </div>
-
     <?php
-if (isset($_SESSION['image_upload_error'])) {
-    echo "<div class='alert alert-danger mt-3'><strong>Помилка!</strong> Кількість зображень не збігається!</div>";
+if (isset($_POST['save'])) {
+    echo <<<HTML
+      <div class="input-group mb-3">
+      <input type="submit" class="btn btn-primary" value="Сгенерувати" name="submit" id="ok" >
+    </div>
+    HTML;
 }
 ?>
 
