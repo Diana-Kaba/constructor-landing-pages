@@ -26,13 +26,14 @@ class Controller
         ob_start();
 
         /* створення блоків */
+
         if ($_POST['header']) {
             if ($_FILES["logo"]["name"]) {
-                $img = "images/" . $_FILES["logo"]["name"];
+                $logoImg  = "images/" . $_FILES["logo"]["name"];
             } else {
-                $img = "";
+                $logoImg  = "";
             }
-            $header = new Header($_POST['header'], $img, $_POST['logo-width'], $_POST['logo-height']);
+            $header = new Header($_POST['header'], $logoImg, $_POST['logo-width'], $_POST['logo-height']);
             $blocks[] = $header;
         }
 
@@ -48,18 +49,19 @@ class Controller
 
         if (isset($_FILES['images']["name"])) {
             $uploadedImagesCount = count($_FILES['images']["name"]);
+            $sliderImgs = [];
 
             for ($i = 0; $i < $uploadedImagesCount; $i++) {
                 $targetFile = $this->uploaddir . basename($_FILES["images"]["name"][$i]);
                 move_uploaded_file($_FILES["images"]["tmp_name"][$i], $targetFile);
-                $imgs[] = $targetFile;
+                $sliderImgs[] = $targetFile;
             }
-            $slider = new Slider($imgs);
+            $slider = new Slider($sliderImgs);
             $blocks[] = $slider;
         }
 
         // Видалення застарілих зображень
-        if (empty($_FILES['images']['name'])) {
+        if (empty($_FILES['images']['name']) || empty($_FILES['logo']['name'])) {
             $files = glob($this->uploaddir . "*");
             foreach ($files as $file) {
                 if (is_file($file)) {
