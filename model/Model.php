@@ -80,45 +80,72 @@ EOD;
         $zip->close(); // завершуємо роботу з архівом
     }
 
-    public function upload($files, $uploaddir)
+    // public function upload($files, $uploaddir)
+    // {
+    //     $message = "";
+
+    //     $target_file = $uploaddir . basename($files["name"]);
+    //     $uploadOk = 1;
+    //     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    //     // перевірка, чи є файл зображенням
+    //     $check = @getimagesize($files["tmp_name"]);
+    //     if ($check === false) {
+    //         // $message = "Файл не є зображенням.";
+    //         $uploadOk = 0;
+    //     }
+
+    //     // перевірка існування файла
+    //     if (file_exists($target_file)) {
+    //         $message = "Файл уже существует.";
+    //         // $uploadOk = 0;
+    //     }
+    //     // перевірка розміру файлу
+    //     if ($files["size"] > 50000000) {
+    //         $message = "Файл занадто великий.";
+    //         $uploadOk = 0;
+    //     }
+    //     // роздільна здатність певних файлових форматів
+    //     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+    //         $message = "Вибачте, дозволені тільки формати JPG, JPEG, PNG & GIF.";
+    //         $uploadOk = 0;
+    //     }
+    //     // реревірка, чи встановлено $uploadOk в 0 (by an error) (помилка)
+    //     if ($uploadOk == 0) {
+    //         $message .= " Файл не був завантажений.";
+    //         // якщо все гаразд, завантажуємо файл
+    //     } else {
+    //         if (move_uploaded_file($files['tmp_name'], $target_file)) {
+    //             $message .= "Файл " . basename($files["tmp_name"]) . " був успішно завантажено.";
+    //         } else {
+    //             $message .= "При завантаженні файлу виникла помилка." . basename($files["tmp_name"]);
+    //         }
+    //     }
+
+    //     return $message;
+    // }
+
+    public function upload($logoFileName, $logoTmpName, $sliderImageNames, $sliderTmpNames, $uploaddir)
     {
         $message = "";
 
-        $target_file = $uploaddir . basename($files["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-        // перевірка, чи є файл зображенням
-        $check = @getimagesize($files["tmp_name"]);
-        if ($check === false) {
-            // $message = "Файл не є зображенням.";
-            $uploadOk = 0;
-        }
-
-        // перевірка існування файла
-        if (file_exists($target_file)) {
-            $message = "Файл уже существует.";
-            // $uploadOk = 0;
-        }
-        // перевірка розміру файлу
-        if ($files["size"] > 50000000) {
-            $message = "Файл занадто великий.";
-            $uploadOk = 0;
-        }
-        // роздільна здатність певних файлових форматів
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-            $message = "Вибачте, дозволені тільки формати JPG, JPEG, PNG & GIF.";
-            $uploadOk = 0;
-        }
-        // реревірка, чи встановлено $uploadOk в 0 (by an error) (помилка)
-        if ($uploadOk == 0) {
-            $message .= " Файл не був завантажений.";
-            // якщо все гаразд, завантажуємо файл
+        // Загрузка логотипа
+        $targetFile = $uploaddir . basename($logoFileName);
+        if (move_uploaded_file($logoTmpName, $targetFile)) {
+            $message .= "Логотип успешно загружен.";
         } else {
-            if (move_uploaded_file($files['tmp_name'], $target_file)) {
-                $message .= "Файл " . basename($files["tmp_name"]) . " був успішно завантажено.";
+            $message .= "Ошибка при загрузке логотипа.";
+        }
+
+        // Загрузка изображений слайдера
+        $uploadedImagesCount = count($sliderImageNames);
+
+        for ($i = 0; $i < $uploadedImagesCount; $i++) {
+            $targetFile = $uploaddir . basename($sliderImageNames[$i]);
+            if (move_uploaded_file($sliderTmpNames[$i], $targetFile)) {
+                $message .= "Изображение для слайдера успешно загружено.";
             } else {
-                $message .= "При завантаженні файлу виникла помилка." . basename($files["tmp_name"]);
+                $message .= "Ошибка при загрузке изображения для слайдера.";
             }
         }
 

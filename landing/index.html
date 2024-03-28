@@ -14,12 +14,36 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <div class="container-fluid d-flex justify-content-center">
     <a class="navbar-brand" href="#">
-    <img src="images/happier.jpg" alt="logo" class="rounded-circle" style="width:111px; height: 111px;"/>
+    <img src="images/photo_2024-01-24_23-02-09.jpg" alt="logo" class="rounded-circle" style="width:40px; height: 40px;"/>
     </a>
   </div>
 </nav>
-<h1 class="mt-2 text-center">Title </h1>
+<h1 class="mt-2 text-center">Заголовок </h1>
     <!-------------Кінець блока "Header"-------------------->
+     <!-------------Блок "Form"-------------------------->
+    <div class="container mt-3">
+  <h2>Ваша форма</h2>
+  <form action="send.php" method="post">
+  <input type="hidden" name="MAX_FILE_SIZE" value="30000">
+    <div class="mb-3 mt-3">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+    </div>
+    <div class="mb-3">
+    <div class="mb-3 mt-3">
+    <label for="name">Ім'я:</label>
+    <input type="text" class="form-control" id="name" placeholder="Ваше ім'я" name="name">
+  </div>
+    </div>
+    <input type="submit" class="btn btn-primary" name="submitB" value="ОК">
+  </form>
+</div>
+    <!-------------Кінець блока "Form"-------------------->
+     <!-------------Блок "Text"-------------------------->
+    <div class='container mt-5'>
+       <p>Текст Текст Текст Текст Текст </p>
+    </div>
+    <!-------------Кінець блоку "Text"-------------------->
 <!-------------Блок "Carousel"-------------------------->
      <div class="container mt-3">
      <div id="demo" class="carousel slide" data-bs-ride="carousel">
@@ -27,9 +51,9 @@
        <!-- Indicators/dots -->
        <div class="carousel-indicators"><button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button><button type="button" data-bs-target="#demo" data-bs-slide-to="1" ></button></div><!-- The slideshow/carousel -->
         <div class="carousel-inner"><div class="carousel-item active">
-                    <img src="../landing/images/fragrance.jpg" alt="Carousel item 0" class="d-block" style="width:100%">
+                    <img src="../landing/images/По ту сторону изгороди.jpg" alt="Carousel item 0" class="d-block" style="width:100%">
                 </div><div class="carousel-item">
-                    <img src="../landing/images/grammy.jpg" alt="Carousel item 1" class="d-block" style="width:100%">
+                    <img src="../landing/images/Темный лес.jpg" alt="Carousel item 1" class="d-block" style="width:100%">
                 </div></div>
        <!-- Left and right controls/icons -->
        <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
@@ -40,6 +64,14 @@
        </button>
      </div>
      </div>
-    <!-------------Кінець блока "Carousel"-------------------->
+    <!-------------Кінець блока "Carousel"-------------------->    <!-------------Блок "Footer"-------------------------->
+    <div class="mt-5 p-4 bg-dark text-white">
+    <div class="text-center">
+    <img src="images/photo_2024-01-24_23-02-09.jpg" alt="logo" class="logo rounded-circle" style="width:40px; height: 40px;"/>
+    <p>Copyright</p>
+    </div>
+</div>
+    <!-------------Кінець блока "Footer"-------------------->
+
     </body>
 </html>

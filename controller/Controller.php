@@ -23,15 +23,17 @@ class Controller
     public function action()
     {
         $blocks = [];
+        $sliderImgs = [];
+        $sliderTmpImgs = [];
         ob_start();
 
         /* створення блоків */
 
         if ($_POST['header']) {
             if ($_FILES["logo"]["name"]) {
-                $logoImg  = "images/" . $_FILES["logo"]["name"];
+                $logoImg = "images/" . $_FILES["logo"]["name"];
             } else {
-                $logoImg  = "";
+                $logoImg = "";
             }
             $header = new Header($_POST['header'], $logoImg, $_POST['logo-width'], $_POST['logo-height']);
             $blocks[] = $header;
@@ -49,12 +51,12 @@ class Controller
 
         if (isset($_FILES['images']["name"])) {
             $uploadedImagesCount = count($_FILES['images']["name"]);
-            $sliderImgs = [];
 
             for ($i = 0; $i < $uploadedImagesCount; $i++) {
                 $targetFile = $this->uploaddir . basename($_FILES["images"]["name"][$i]);
-                move_uploaded_file($_FILES["images"]["tmp_name"][$i], $targetFile);
                 $sliderImgs[] = $targetFile;
+                $sliderTmpImgs[] = $_FILES["images"]["tmp_name"][$i];
+
             }
             $slider = new Slider($sliderImgs);
             $blocks[] = $slider;
@@ -98,8 +100,12 @@ class Controller
         fwrite($f, $str_land); // запис в файл лендінгу
         fclose($f);
 
-        if ($_FILES["logo"]["name"]) {
-            $model->upload($_FILES["logo"], $this->uploaddir);
+        if (!empty($_FILES["logo"]["name"]) && !empty($_FILES["images"]["name"])) {
+        $model->upload($_FILES["logo"]["name"], $_FILES["logo"]["tmp_name"], $sliderImgs, $sliderTmpImgs, $this->uploaddir);
+        } else if (!empty($_FILES["logo"]["name"]) && empty($_FILES["images"]["name"])) {
+            $model->upload($_FILES["logo"]["name"], $_FILES["logo"]["tmp_name"], [], [], $this->uploaddir);
+        } else {
+            $model->upload("", "", $sliderImgs, $sliderTmpImgs, $this->uploaddir);
         }
 
         $model->achiving($this->dir);
